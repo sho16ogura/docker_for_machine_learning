@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: docker-ml-app
+    build:
+      image: weagent/swe-agent:latest
+      context: .
+      volumes:
+        - type: volume
+          source: /var/run/docker.sock
+          target: /var/run/docker.sock
+        - type: mount
+          source: $(pwd)/keys.cfg
+          target: /app/keys.cfg
+      command: python run.py --image_name=sweagent/swe-agent:latest \
+                --model_name gpt4 \
+                --data_path https://github.com/pvlib/pvlib-python/issues/1603 \
+                --config_file config/default_from_url.yaml  --skip_existing=False
